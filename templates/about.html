@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Our mission{% endblock %}
+{% block content %}
+<section class="about-hero"><span class="eyebrow">WHY FRESHCONNECT EXISTS</span><h1>Every harvest deserves a chance.</h1><p>When market prices fall or too much produce reaches the market at once, farmers can struggle to recover the money and effort they invested. Edible crops may be left unsold or wasted.</p></section>
+<section class="mission-grid">
+  <article><span>01</span><h2>Make surplus visible</h2><p>Farmers can post crop photos, quantities, location, and asking price so nearby buyers can discover produce that might otherwise go unsold.</p></article>
+  <article><span>02</span><h2>Connect people directly</h2><p>Households, shops, hostels, restaurants, and community groups can contact farmers to discuss bulk purchases and collection.</p></article>
+  <article><span>03</span><h2>Keep choices with farmers</h2><p>Farmers decide their own prices and availability. The platform helps make a connection; it does not guarantee a sale or set a minimum price.</p></article>
+</section>
+<section class="about-note"><h2>Our long-term vision</h2><p>Build a trusted local network with verified sellers, regional languages, buyer alerts, bulk-order coordination, and transparent impact reporting—so that more edible produce reaches people instead of becoming waste.</p><a class="button button-green" href="{{ url_for('index') }}">Explore the marketplace →</a></section>
+{% endblock %}

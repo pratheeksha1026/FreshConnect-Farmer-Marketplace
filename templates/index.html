@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Find fresh local produce{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="hero-copy">
+    <span class="eyebrow">A better path from farm to table</span>
+    <h1>Good food should find a home.</h1>
+    <p>Help farmers sell surplus fruits and vegetables directly to nearby buyers. Fresh produce, fair choices, less waste.</p>
+    <div class="hero-actions">
+      <a class="button button-light" href="#market">Explore produce <span>↓</span></a>
+      <a class="hero-link" href="{{ url_for('add_listing') }}">I’m a farmer →</a>
+    </div>
+    <div class="hero-note"><span class="pulse"></span> Local listings · Farmer-set prices · Direct contact</div>
+  </div>
+  <div class="hero-art" aria-label="Illustration of fresh vegetables">
+    <div class="sun"></div><div class="leaf leaf-one"></div><div class="leaf leaf-two"></div>
+    <div class="produce-bowl"><span>🥬</span><span>🍅</span><span>🥕</span><span>🥦</span><span>🍆</span></div>
+    <div class="art-caption">Picked with care.<br><strong>Shared with purpose.</strong></div>
+  </div>
+</section>
+
+<section class="impact-strip">
+  <div><strong>Less waste</strong><span>Find a buyer for surplus harvests</span></div>
+  <div><strong>Farmer-led pricing</strong><span>Farmers decide their asking price</span></div>
+  <div><strong>Direct connection</strong><span>Talk and arrange pickup together</span></div>
+</section>
+
+<section class="market-section" id="market">
+  <div class="section-heading">
+    <div><span class="eyebrow">THE LOCAL MARKET</span><h2>Fresh finds near you</h2><p>Contact the farmer to confirm availability before travelling.</p></div>
+    <a class="button button-dark" href="{{ url_for('add_listing') }}">＋ Add a listing</a>
+  </div>
+  <form class="search-panel" method="get" action="{{ url_for('index') }}">
+    <label class="search-box"><span>⌕</span><input type="search" name="q" value="{{ q }}" placeholder="Search tomato, banana, village…"></label>
+    <select name="category" aria-label="Filter category">
+      <option value="">All produce</option>
+      <option value="Vegetables" {% if category == 'Vegetables' %}selected{% endif %}>Vegetables</option>
+      <option value="Fruits" {% if category == 'Fruits' %}selected{% endif %}>Fruits</option>
+      <option value="Other" {% if category == 'Other' %}selected{% endif %}>Other</option>
+    </select>
+    <button class="button button-green" type="submit">Search</button>
+    {% if q or category %}<a class="clear-link" href="{{ url_for('index') }}">Clear</a>{% endif %}
+  </form>
+
+  {% if listings %}
+  <div class="listing-grid">
+    {% for item in listings %}
+    <article class="listing-card">
+      <a class="listing-image" href="{{ url_for('listing_detail', listing_id=item.id) }}">
+        {% if item.image_filename %}
+          <img src="{{ url_for('static', filename='uploads/' + item.image_filename) }}" alt="{{ item.produce_name }}">
+        {% else %}
+          <div class="produce-placeholder {{ item.category|lower }}">
+            <span>{% if item.produce_name|lower in ['tomato','tomatoes'] %}🍅{% elif item.produce_name|lower in ['banana','bananas'] %}🍌{% elif item.produce_name|lower in ['beans'] %}🫛{% elif item.category == 'Fruits' %}🍎{% else %}🥬{% endif %}</span>
+            <small>Fresh from the farm</small>
+          </div>
+        {% endif %}
+        <span class="category-tag">{{ item.category }}</span>
+      </a>
+      <div class="listing-content">
+        <div class="listing-title-row"><h3>{{ item.produce_name }}</h3><span class="price">₹{{ "%.2f"|format(item.price_per_kg) }}<small>/ kg</small></span></div>
+        <p class="location">⌖ {{ item.village }}</p>
+        <p class="quantity">{{ "%.1f"|format(item.quantity_kg) }} kg available</p>
+        <div class="farmer-row"><span class="avatar">{{ item.farmer_name[:1]|upper }}</span><span><small>Listed by</small><strong>{{ item.farmer_name }}</strong></span><a class="arrow-link" href="{{ url_for('listing_detail', listing_id=item.id) }}" aria-label="View {{ item.produce_name }}">↗</a></div>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state"><span>🌱</span><h3>No matching produce yet</h3><p>Try another search, or be the first farmer to list a harvest.</p><a class="button button-green" href="{{ url_for('add_listing') }}">List produce</a></div>
+  {% endif %}
+</section>
+<section class="farmer-banner"><div><span class="eyebrow">GROWN BY YOU. CHOSEN BY THEM.</span><h2>Have surplus produce?</h2><p>Post what you have, set your price, and let local buyers contact you.</p></div><a class="button button-light" href="{{ url_for('add_listing') }}">Sell your harvest →</a></section>
+{% endblock %}

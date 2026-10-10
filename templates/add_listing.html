@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}List your produce{% endblock %}
+{% block content %}
+<section class="form-page">
+  <a class="back-link" href="{{ url_for('index') }}">← Back to marketplace</a>
+  <div class="form-intro"><span class="eyebrow">FOR FARMERS & GROWERS</span><h1>Give your harvest a new home.</h1><p>Share what you have available. You set the price, and buyers contact you directly.</p></div>
+  <form class="produce-form" method="post" enctype="multipart/form-data">
+    <h2>Produce details</h2><p class="form-help">Fields marked * are required.</p>
+    <div class="form-grid">
+      <label>Produce name *<input name="produce_name" required value="{{ form.get('produce_name','') }}" placeholder="e.g. Tomato"></label>
+      <label>Category *<select name="category" required><option value="">Choose category</option>{% for c in ['Vegetables','Fruits','Other'] %}<option value="{{ c }}" {% if form.get('category') == c %}selected{% endif %}>{{ c }}</option>{% endfor %}</select></label>
+      <label>Quantity available (kg) *<input type="number" min="0.1" step="0.1" name="quantity_kg" required value="{{ form.get('quantity_kg','') }}" placeholder="e.g. 100"></label>
+      <label>Your price per kg (₹) *<input type="number" min="0" step="0.01" name="price_per_kg" required value="{{ form.get('price_per_kg','') }}" placeholder="e.g. 5.00"><small>You choose the price. ₹0 is allowed for donation.</small></label>
+      <label>Farmer / seller name *<input name="farmer_name" required value="{{ form.get('farmer_name','') }}" placeholder="Your name"></label>
+      <label>Phone number *<input type="tel" name="phone" required value="{{ form.get('phone','') }}" placeholder="Number buyers can contact"></label>
+      <label>Village / area *<input name="village" required value="{{ form.get('village','') }}" placeholder="e.g. Nanjangud, Mysuru"></label>
+      <label>Harvest date<input type="date" name="harvest_date" value="{{ form.get('harvest_date','') }}"></label>
+      <label class="full-field">Upload a photo (optional)<input type="file" name="image" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"><small>JPG, PNG, or WEBP; maximum 5 MB.</small></label>
+      <label class="full-field">Additional details<textarea name="description" rows="4" placeholder="Freshness, preferred pickup time, bulk orders, etc.">{{ form.get('description','') }}</textarea></label>
+    </div>
+    <div class="privacy-note">🔒 Your contact number will be visible to buyers on this demo site. Use test details while developing.</div>
+    <button class="button button-green submit-button" type="submit">Publish produce listing →</button>
+  </form>
+</section>
+{% endblock %}

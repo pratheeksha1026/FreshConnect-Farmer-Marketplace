@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}{{ listing.produce_name }}{% endblock %}
+{% block content %}
+<section class="detail-page">
+  <a class="back-link" href="{{ url_for('index') }}">← Back to marketplace</a>
+  <div class="detail-card">
+    <div class="detail-visual">
+      {% if listing.image_filename %}<img src="{{ url_for('static', filename='uploads/' + listing.image_filename) }}" alt="{{ listing.produce_name }}">
+      {% else %}<div class="detail-emoji">{% if listing.category == 'Fruits' %}🍎{% else %}🥬{% endif %}</div>{% endif %}
+    </div>
+    <div class="detail-info">
+      <span class="eyebrow">{{ listing.category }} · LOCAL LISTING</span>
+      <h1>{{ listing.produce_name }}</h1>
+      <p class="detail-price">₹{{ "%.2f"|format(listing.price_per_kg) }} <span>/ kg</span></p>
+      <div class="detail-facts"><div><small>Available quantity</small><strong>{{ "%.1f"|format(listing.quantity_kg) }} kg</strong></div><div><small>Pickup area</small><strong>{{ listing.village }}</strong></div>{% if listing.harvest_date %}<div><small>Harvest date</small><strong>{{ listing.harvest_date }}</strong></div>{% endif %}</div>
+      {% if listing.description %}<p class="detail-description">{{ listing.description }}</p>{% endif %}
+      <div class="seller-card"><span class="avatar avatar-large">{{ listing.farmer_name[:1]|upper }}</span><div><small>Farmer / seller</small><strong>{{ listing.farmer_name }}</strong><span class="location">⌖ {{ listing.village }}</span></div></div>
+      <div class="contact-actions"><a class="button button-green" href="tel:{{ listing.phone }}">☎ Call farmer</a><a class="button button-outline" target="_blank" rel="noopener" href="https://wa.me/{{ listing.phone|replace('+','')|replace(' ','')|replace('-','') }}">WhatsApp farmer ↗</a></div>
+      <p class="safety-note">Confirm the current quantity, final price, payment method, and pickup/delivery arrangements directly with the farmer before travelling.</p>
+      <form method="post" action="{{ url_for('delete_listing', listing_id=listing.id) }}" data-confirm-delete><button class="delete-link" type="submit">Remove demo listing</button></form>
+    </div>
+  </div>
+</section>
+{% endblock %}
